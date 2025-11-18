@@ -1,4 +1,4 @@
-import math,random
+import math,random, pygame
 
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
@@ -15,6 +15,8 @@ class SudokuGenerator:
 	self.board			- a 2D list of ints to represent the board
 	self.box_length		- the square root of row_length
 
+
+
 	Parameters:
     row_length is the number of rows/columns of the board (always 9 for this project)
     removed_cells is an integer value - the number of cells to be removed
@@ -22,6 +24,10 @@ class SudokuGenerator:
 	Return:
 	None
     '''
+
+    row_length = 9
+    board = []
+    box_length = 3
     def __init__(self, row_length, removed_cells):
         pass
 
@@ -209,3 +215,7 @@ def generate_sudoku(size, removed):
     sudoku.remove_cells()
     board = sudoku.get_board()
     return board
+
+
+if __name__ == "__main__":
+
