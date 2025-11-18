@@ -218,4 +218,18 @@ def generate_sudoku(size, removed):
 
 
 if __name__ == "__main__":
+    pygame.init()
+    homeScreen = pygame.display.set_mode((400, 300))
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        homeScreen.fill("white")
+
+        pygame.display.flip()
+        clock.tick(60)
 
