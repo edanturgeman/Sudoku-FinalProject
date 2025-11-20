@@ -223,7 +223,25 @@ def generate_sudoku(size, removed):
 
 if __name__ == "__main__":
     pygame.init()
-    homeScreen = pygame.display.set_mode((400, 300))
+    pygame.font.init()
+    screenWidth = 540
+    screenHeight = screenWidth
+    homeScreen = pygame.display.set_mode((screenWidth, screenHeight))
+
+
+    welcomeFont = pygame.font.SysFont("Arial", 70)
+    welcomeSurface = welcomeFont.render("Welcome to Sudoku!", True, (0, 0, 0))
+    welcomeRect = welcomeSurface.get_rect()
+    welcomeRect.center = (screenWidth // 2, screenHeight // 8)
+
+    selectFont = pygame.font.SysFont("Arial", 40)
+    selectSurface = selectFont.render("Select Game Mode:", True, (0, 0, 0))
+    selectRect = selectSurface.get_rect()
+    selectRect.center = (screenWidth // 2, screenHeight // 2)
+
+    easyButton =
+
+
     clock = pygame.time.Clock()
     running = True
 
@@ -233,6 +251,10 @@ if __name__ == "__main__":
                 running = False
 
         homeScreen.fill("white")
+
+        homeScreen.blit(welcomeSurface, welcomeRect)
+        homeScreen.blit(selectSurface, selectRect)
+
 
         pygame.display.flip()
         clock.tick(60)
