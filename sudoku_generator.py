@@ -222,24 +222,52 @@ def generate_sudoku(size, removed):
 
 
 if __name__ == "__main__":
+
+    #Initialize pygame features
     pygame.init()
     pygame.font.init()
+
+    #Screen dimensions
     screenWidth = 540
     screenHeight = screenWidth
+
+    #Creates home screen
     homeScreen = pygame.display.set_mode((screenWidth, screenHeight))
 
-
+    #Welcome message
     welcomeFont = pygame.font.SysFont("Arial", 70)
     welcomeSurface = welcomeFont.render("Welcome to Sudoku!", True, (0, 0, 0))
     welcomeRect = welcomeSurface.get_rect()
     welcomeRect.center = (screenWidth // 2, screenHeight // 8)
 
+    #Select game mode message
     selectFont = pygame.font.SysFont("Arial", 40)
     selectSurface = selectFont.render("Select Game Mode:", True, (0, 0, 0))
     selectRect = selectSurface.get_rect()
     selectRect.center = (screenWidth // 2, screenHeight // 2)
 
-    easyButton =
+    #Font , location, and dimensions for all the buttons on home screen
+    buttonFont = selectFont = pygame.font.SysFont("Arial", 40)
+
+    #Easy button
+    easyButton = pygame.Rect(screenWidth//8, screenHeight// 1.5, 80, 60)
+    easySurface = buttonFont.render("Easy", True, (0, 0, 0))
+    easyRect = easySurface.get_rect()
+    easyRect.center = (screenWidth//8, screenHeight// 1.5)
+
+    #Medium button
+    mediumButton = pygame.Rect(screenWidth//3, screenHeight// 1.5, 120, 60)
+    mediumSurface = buttonFont.render("Medium", True, (0, 0, 0))
+    mediumRect = mediumSurface.get_rect()
+    mediumRect.center = (screenWidth // 3, screenHeight // 1.5)
+
+    #Hard button
+    hardButton = pygame.Rect(screenWidth // 1.6, screenHeight // 1.5, 80, 60)
+    hardSurface = buttonFont.render("Hard", True, (0, 0, 0))
+    hardRect = hardSurface.get_rect()
+    hardRect.center = (screenWidth // 1.6, screenHeight // 1.5)
+
+
 
 
     clock = pygame.time.Clock()
@@ -250,10 +278,22 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
 
+        #Makes all white home screen with 2 basic messages
         homeScreen.fill("white")
-
         homeScreen.blit(welcomeSurface, welcomeRect)
         homeScreen.blit(selectSurface, selectRect)
+
+        #Display easy button
+        pygame.draw.rect(homeScreen, "orange", easyButton)
+        homeScreen.blit(easySurface, easyRect.center)
+
+        #Display medium button
+        pygame.draw.rect(homeScreen, "orange", mediumButton)
+        homeScreen.blit(mediumSurface, mediumRect.center)
+
+        #Display hard button
+        pygame.draw.rect(homeScreen, "orange", hardButton)
+        homeScreen.blit(hardSurface, hardRect.center)
 
 
         pygame.display.flip()
