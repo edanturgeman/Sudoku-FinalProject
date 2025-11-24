@@ -1,4 +1,4 @@
-import math,random
+import math,random, pygame, sys
 
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
@@ -15,6 +15,8 @@ class SudokuGenerator:
 	self.board			- a 2D list of ints to represent the board
 	self.box_length		- the square root of row_length
 
+
+
 	Parameters:
     row_length is the number of rows/columns of the board (always 9 for this project)
     removed_cells is an integer value - the number of cells to be removed
@@ -22,11 +24,16 @@ class SudokuGenerator:
 	Return:
 	None
     '''
-    def __init__(self, row_length, removed_cells):
+
+    row_length = 9
+    removed_cells = 30
+    board = []
+    box_length = math.sqrt(row_length)
+
+
+    def __init__(self, removed_cells, row_length = 9):
         self.row_length = row_length
         self.removed_cells = removed_cells
-        self.board = [[0]*row_length for _ in range(row_length)]
-        self.box_length = int((row_length)**(1/2))
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -35,7 +42,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-        return self.board
+        pass
 
     '''
 	Displays the board to the console
@@ -45,8 +52,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        for row in self.board:
-            print(' '.join([str(cell) for cell in row]))
+        pass
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -59,7 +65,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        return not (num in self.board[row])
+        pass
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -72,10 +78,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-        column = []
-        for row in self.board:
-            column.append(row[col])
-        return not(num in column)
+        pass
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -90,11 +93,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-        all_values = []
-        for row_index in range(row_start,row_start+3):
-            for column_index in range(col_start,col_start+3):
-                all_values.append(self.board[row_index][column_index])
-        return not(num in all_values)
+        pass
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -107,8 +106,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
-        box_row,box_col = int(3*(row//3)), int(3*(col//3))
-        return self.valid_in_box(box_row,box_col,num) and self.valid_in_col(int(col),num) and self.valid_in_row(int(row),num)
+        pass
 
     '''
     Fills the specified 3x3 box with values
@@ -121,10 +119,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-        random_values = random.sample(range(1,10),9)
-        for row in range(row_start,row_start+3):
-            for col in range(col_start,col_start+3):
-                self.board[row][col] = random_values[3*(row-row_start) + (col-col_start)]
+        pass
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -134,9 +129,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-        self.fill_box(0,0)
-        self.fill_box(3,3)
-        self.fill_box(6,6)
+        pass
 
     '''
     DO NOT CHANGE
@@ -202,11 +195,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        positions = [(t%9,t//9) for t in random.sample(range(0,81),self.removed_cells)]
-        for pos in positions:
-            pos_x,pos_y = pos
-            self.board[pos_x][pos_y] = 0
-        
+        pass
 
 '''
 DO NOT CHANGE
@@ -230,3 +219,104 @@ def generate_sudoku(size, removed):
     sudoku.remove_cells()
     board = sudoku.get_board()
     return board
+
+# def homeScreen():
+
+
+
+if __name__ == "__main__":
+
+    #Initialize pygame features
+    pygame.init()
+    pygame.font.init()
+
+    #Screen dimensions
+    screenWidth = 540
+    screenHeight = screenWidth
+
+    #Creates home screen
+    homeScreen = pygame.display.set_mode((screenWidth, screenHeight))
+
+    #Welcome message
+    welcomeFont = pygame.font.SysFont("Arial", 70)
+    welcomeSurface = welcomeFont.render("Welcome to Sudoku!", True, (0, 0, 0))
+    welcomeRect = welcomeSurface.get_rect()
+    welcomeRect.center = (screenWidth // 2, screenHeight // 8)
+
+    #Select game mode message
+    selectFont = pygame.font.SysFont("Arial", 40)
+    selectSurface = selectFont.render("Select Game Mode:", True, (0, 0, 0))
+    selectRect = selectSurface.get_rect()
+    selectRect.center = (screenWidth // 2, screenHeight // 2)
+
+    #Font , location, and dimensions for all the buttons on home screen
+    buttonFont = selectFont = pygame.font.SysFont("Arial", 40)
+
+    #Easy button
+    easyButton = pygame.Rect(screenWidth//8, screenHeight// 1.5, 80, 60)
+    easySurface = buttonFont.render("Easy", True, (0, 0, 0))
+    easyRect = easySurface.get_rect()
+    easyRect.center = (screenWidth//8, screenHeight// 1.5)
+
+    #Medium button
+    mediumButton = pygame.Rect(screenWidth//3, screenHeight// 1.5, 120, 60)
+    mediumSurface = buttonFont.render("Medium", True, (0, 0, 0))
+    mediumRect = mediumSurface.get_rect()
+    mediumRect.center = (screenWidth // 3, screenHeight // 1.5)
+
+    #Hard button
+    hardButton = pygame.Rect(screenWidth // 1.6, screenHeight // 1.5, 80, 60)
+    hardSurface = buttonFont.render("Hard", True, (0, 0, 0))
+    hardRect = hardSurface.get_rect()
+    hardRect.center = (screenWidth // 1.6, screenHeight // 1.5)
+
+
+
+
+    clock = pygame.time.Clock()
+    runningHome = True
+
+    while runningHome:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+
+                clickLocation = event.pos
+
+                if easyButton.collidepoint(clickLocation):
+                    gameDifficulty = "Easy"
+                    runningHome = False
+
+                elif mediumButton.collidepoint(clickLocation):
+                    gameDifficulty = "Medium"
+                    runningHome = False
+
+                elif hardButton.collidepoint(clickLocation):
+                    gameDifficulty = "Hard"
+                    runningHome = False
+
+        #Makes all white home screen with 2 basic messages
+        homeScreen.fill("white")
+        homeScreen.blit(welcomeSurface, welcomeRect)
+        homeScreen.blit(selectSurface, selectRect)
+
+        #Display easy button
+        pygame.draw.rect(homeScreen, "orange", easyButton)
+        homeScreen.blit(easySurface, easyRect.center)
+
+        #Display medium button
+        pygame.draw.rect(homeScreen, "orange", mediumButton)
+        homeScreen.blit(mediumSurface, mediumRect.center)
+
+        #Display hard button
+        pygame.draw.rect(homeScreen, "orange", hardButton)
+        homeScreen.blit(hardSurface, hardRect.center)
+
+
+        pygame.display.flip()
+        clock.tick(60)
+
+    gameScreen = pygame.display.set_mode((screenWidth, screenHeight))
+    gameRunning = True
