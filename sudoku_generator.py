@@ -1,4 +1,4 @@
-import math,random, pygame
+import math,random, pygame, sys
 
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
@@ -220,6 +220,9 @@ def generate_sudoku(size, removed):
     board = sudoku.get_board()
     return board
 
+# def homeScreen():
+
+
 
 if __name__ == "__main__":
 
@@ -271,12 +274,28 @@ if __name__ == "__main__":
 
 
     clock = pygame.time.Clock()
-    running = True
+    runningHome = True
 
-    while running:
+    while runningHome:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+
+                clickLocation = event.pos
+
+                if easyButton.collidepoint(clickLocation):
+                    gameDifficulty = "Easy"
+                    runningHome = False
+
+                elif mediumButton.collidepoint(clickLocation):
+                    gameDifficulty = "Medium"
+                    runningHome = False
+
+                elif hardButton.collidepoint(clickLocation):
+                    gameDifficulty = "Hard"
+                    runningHome = False
 
         #Makes all white home screen with 2 basic messages
         homeScreen.fill("white")
@@ -298,4 +317,7 @@ if __name__ == "__main__":
 
         pygame.display.flip()
         clock.tick(60)
+
+    gameScreen = pygame.display.set_mode((screenWidth, screenHeight))
+    gameRunning = True
 
