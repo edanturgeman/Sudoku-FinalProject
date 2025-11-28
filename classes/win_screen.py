@@ -10,6 +10,14 @@ class WinScreen(Screen):
     def start(self):
         surface = self.main_surface
 
+        try:
+            background_image = pygame.image.load("bgimage/source.png")
+
+            background_image = pygame.transform.scale(background_image, (500, 500))
+            surface.blit(background_image, (0, 0))
+        except:
+            surface.fill((210, 231, 246))
+
         title_font = pygame.font.SysFont("Arial",30)
         title_surface = title_font.render("You win!",True,(255,255,255))
 

@@ -14,7 +14,7 @@ class Cell:
 
     def draw(self,surface):
         self.surface = surface
-        color = "white"
+        color = "black"
         width = 1
         if self.selected:
             color = "red"
@@ -22,7 +22,7 @@ class Cell:
         self.cell_rect = pygame.draw.rect(surface, color, (self.position[0],self.position[1],self.size[0],self.size[1]),width)
         
         font = pygame.font.SysFont("Arial", 20)
-        text_surface = font.render(self.central_text,True,"white")
+        text_surface = font.render(self.central_text,True,(0, 0, 0))
         text_rect = text_surface.get_rect()
         text_rect.center = (self.position[0]+self.size[0]/2,self.position[1]+self.size[1]/2)
 

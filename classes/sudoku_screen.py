@@ -143,9 +143,25 @@ class SudokuScreen(Screen):
                         self.current_cell_pos = pos
                         self.current_cell.selected = True
 
-                    
     def tick(self):
-        self.main_surface.fill((0,0,0))
+        self.main_surface.fill((210, 231, 246))
+
+        for i in range(10):  # 0 to 9 = 10 lines
+            pygame.draw.line(self.main_surface, (0, 0, 0),
+                             (75 + i * 40, 50),
+                             (75 + i * 40, 50 + 360), 1)
+            pygame.draw.line(self.main_surface, (0, 0, 0),
+                             (75, 50 + i * 40),
+                             (75 + 360, 50 + i * 40), 1)
+
+        for i in range(4):
+            pygame.draw.line(self.main_surface, (0, 0, 0),
+                             (75 + i * 120, 50),
+                             (75 + i * 120, 50 + 360), 4)
+            pygame.draw.line(self.main_surface, (0, 0, 0),
+                             (75, 50 + i * 120),
+                             (75 + 360, 50 + i * 120), 4)
+
         for cell in self.cells.values():
             cell.draw(self.main_surface)
         for button in self.buttons:
