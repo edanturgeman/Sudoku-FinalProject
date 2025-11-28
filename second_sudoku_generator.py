@@ -320,4 +320,3 @@ if __name__ == "__main__":
 
     gameScreen = pygame.display.set_mode((screenWidth, screenHeight))
     gameRunning = True
-
