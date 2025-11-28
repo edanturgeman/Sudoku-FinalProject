@@ -32,7 +32,10 @@ class SudokuGenerator:
 
 
     def __init__(self, removed_cells, row_length):
-
+        self.row_length = row_length
+        self.removed_cells = removed_cells
+        self.board = [[0] * row_length for _ in range(row_length)]
+        self.box_length = int((row_length) ** (1 / 2))
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -41,6 +44,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
+        return self.board
 
 
     '''
@@ -51,7 +55,8 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-
+        for row in self.board:
+            print(' '.join([str(cell) for cell in row]))
 
 
     '''
@@ -65,6 +70,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
+        return not (num in self.board[row])
 
 
     '''
@@ -78,7 +84,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-
+        column = []
+        for row in self.board:
+            column.append(row[col])
+        return not (num in column)
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -93,7 +102,11 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-
+        all_values = []
+        for row_index in range(row_start, row_start + 3):
+            for column_index in range(col_start, col_start + 3):
+                all_values.append(self.board[row_index][column_index])
+        return not (num in all_values)
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -106,7 +119,8 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
-
+        box_row, box_col = int(3 * (row // 3)), int(3 * (col // 3))
+        return self.valid_in_box(box_row, box_col, num) and self.valid_in_col(int(col), num) and self.valid_in_row(int(row), num)
 
     '''
     Fills the specified 3x3 box with values
@@ -119,7 +133,10 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-
+        random_values = random.sample(range(1, 10), 9)
+        for row in range(row_start, row_start + 3):
+            for col in range(col_start, col_start + 3):
+                self.board[row][col] = random_values[3 * (row - row_start) + (col - col_start)]
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -129,7 +146,9 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-
+        self.fill_box(0, 0)
+        self.fill_box(3, 3)
+        self.fill_box(6, 6)
 
     '''
     DO NOT CHANGE
@@ -195,7 +214,10 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-
+        positions = [(t % 9, t // 9) for t in random.sample(range(0, 81), self.removed_cells)]
+        for pos in positions:
+            pos_x, pos_y = pos
+            self.board[pos_x][pos_y] = 0
 
 '''
 DO NOT CHANGE
@@ -220,8 +242,33 @@ def generate_sudoku(size, removed):
     board = sudoku.get_board()
     return board
 
-# def homeScreen():
+class Board:
 
+    def __init__(self, width, height, screen, difficulty):
+        self.width = width
+        self.height = height
+        self.screen = screen
+        self.difficulty = difficulty
+
+    def draw(self):
+
+        #Horiontal Lines
+        for i in range(1, 10):
+
+            if i % 3 == 0:
+                pygame.draw.line(self.screen, (0, 0, 0), (0, i * 60), (self.width, i * 60), 5)
+            else:
+
+                pygame.draw.line(self.screen, (0, 0, 0), (0, i * 60), (self.width, i* 60))
+
+        #Vertical lines
+        for i in range(1, 9):
+
+            if i % 3 == 0:
+                pygame.draw.line(self.screen, (0, 0, 0), (i * 60, 0), (i * 60, self.height - 60), 5)
+
+            else:
+                pygame.draw.line(self.screen, (0, 0, 0), (i * 60, 0), (i * 60, self.height - 60))
 
 
 if __name__ == "__main__":
@@ -231,8 +278,7 @@ if __name__ == "__main__":
     pygame.font.init()
 
     #Screen dimensions
-    screenWidth = 540
-    screenHeight = screenWidth
+    screenWidth, screenHeight = 540, 600
 
     #Creates home screen
     homeScreen = pygame.display.set_mode((screenWidth, screenHeight))
@@ -270,54 +316,112 @@ if __name__ == "__main__":
     hardRect = hardSurface.get_rect()
     hardRect.center = (screenWidth // 1.6, screenHeight // 1.5)
 
-
-
-
     clock = pygame.time.Clock()
     runningHome = True
+    condition = True
 
-    while runningHome:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+    while condition:
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+        while runningHome:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
 
-                clickLocation = event.pos
+                if event.type == pygame.MOUSEBUTTONDOWN:
 
-                if easyButton.collidepoint(clickLocation):
-                    gameDifficulty = "Easy"
-                    runningHome = False
+                    clickLocation = event.pos
 
-                elif mediumButton.collidepoint(clickLocation):
-                    gameDifficulty = "Medium"
-                    runningHome = False
+                    if easyButton.collidepoint(clickLocation):
+                        gameDifficulty = "Easy"
+                        removedCells = 30
+                        runningHome = False
 
-                elif hardButton.collidepoint(clickLocation):
-                    gameDifficulty = "Hard"
-                    runningHome = False
+                    elif mediumButton.collidepoint(clickLocation):
+                        gameDifficulty = "Medium"
+                        removedCells = 40
+                        runningHome = False
 
-        #Makes all white home screen with 2 basic messages
-        homeScreen.fill("white")
-        homeScreen.blit(welcomeSurface, welcomeRect)
-        homeScreen.blit(selectSurface, selectRect)
+                    elif hardButton.collidepoint(clickLocation):
+                        gameDifficulty = "Hard"
+                        removedCells = 50
+                        runningHome = False
 
-        #Display easy button
-        pygame.draw.rect(homeScreen, "orange", easyButton)
-        homeScreen.blit(easySurface, easyRect.center)
+            #Makes all white home screen with 2 basic messages
+            homeScreen.fill("white")
+            homeScreen.blit(welcomeSurface, welcomeRect)
+            homeScreen.blit(selectSurface, selectRect)
 
-        #Display medium button
-        pygame.draw.rect(homeScreen, "orange", mediumButton)
-        homeScreen.blit(mediumSurface, mediumRect.center)
+            #Display easy button
+            pygame.draw.rect(homeScreen, "orange", easyButton)
+            homeScreen.blit(easySurface, easyRect.center)
 
-        #Display hard button
-        pygame.draw.rect(homeScreen, "orange", hardButton)
-        homeScreen.blit(hardSurface, hardRect.center)
+            #Display medium button
+            pygame.draw.rect(homeScreen, "orange", mediumButton)
+            homeScreen.blit(mediumSurface, mediumRect.center)
+
+            #Display hard button
+            pygame.draw.rect(homeScreen, "orange", hardButton)
+            homeScreen.blit(hardSurface, hardRect.center)
+
+            pygame.display.flip()
+            clock.tick(60)
+
+        #Reset button
+        resetButton = pygame.Rect(screenWidth // 8, screenHeight - 50, 90, 50)
+        resetSurface = buttonFont.render("Reset", True, (0, 0, 0))
+        resetRect = resetSurface.get_rect()
+        resetRect.center = (screenWidth // 8, screenHeight - 50)
+
+        #Restart button
+        restartButton = pygame.Rect(screenWidth // 3, screenHeight - 50, 110, 50)
+        restartSurface = buttonFont.render("Restart", True, (0, 0, 0))
+        restartRect = restartSurface.get_rect()
+        restartRect.center = (screenWidth // 3, screenHeight - 50)
+
+        #Exit button
+        exitButton = pygame.Rect(screenWidth // 1.6, screenHeight - 50, 60, 50)
+        exitSurface = buttonFont.render("Exit", True, (0, 0, 0))
+        exitRect = exitSurface.get_rect()
+        exitRect.center = (screenWidth // 1.6, screenHeight - 50)
+
+        gameScreen = pygame.display.set_mode((screenWidth, screenHeight))
+        gameRunning = True
+
+        while gameRunning:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+
+                    clickLocation = event.pos
+
+                    if exitButton.collidepoint(clickLocation):
+                        sys.exit()
+
+                    if restartButton.collidepoint(clickLocation):
+                        runningHome = True
+                        gameRunning = False
+
+            #Draws the board
+            homeScreen.fill("white")
+            board = Board(screenWidth, screenHeight, gameScreen, gameDifficulty)
+            board.draw()
+
+            #Displays the reset button
+            pygame.draw.rect(gameScreen, "orange", resetButton)
+            gameScreen.blit(resetSurface, resetRect.center)
+
+            #Displays the restart button
+            pygame.draw.rect(gameScreen, "orange", restartButton)
+            gameScreen.blit(restartSurface, restartRect.center)
+
+            #Displays the exit button
+            pygame.draw.rect(gameScreen, "orange", exitButton)
+            gameScreen.blit(exitSurface, exitRect.center)
+
+            pygame.display.flip()
+            clock.tick(60)
 
 
-        pygame.display.flip()
-        clock.tick(60)
-
-    gameScreen = pygame.display.set_mode((screenWidth, screenHeight))
-    gameRunning = True
 
