@@ -265,7 +265,7 @@ class Board:
 
     def draw(self):
 
-        # Horiontal Lines
+        # Horizontal Lines
         for i in range(1, 10):
 
             if i % 3 == 0:
@@ -296,6 +296,9 @@ if __name__ == "__main__":
     # Creates home screen
     homeScreen = pygame.display.set_mode((screenWidth, screenHeight))
 
+    background_image = pygame.image.load("source.png").convert()
+    background_image = pygame.transform.scale(background_image, (screenWidth, screenHeight))
+
     # Welcome message
     welcomeFont = pygame.font.SysFont("Arial", 70)
     welcomeSurface = welcomeFont.render("Welcome to Sudoku!", True, (0, 0, 0))
@@ -303,7 +306,7 @@ if __name__ == "__main__":
     welcomeRect.center = (screenWidth // 2, screenHeight // 8)
 
     # Select game mode message
-    selectFont = pygame.font.SysFont("Arial", 40)
+    selectFont = pygame.font.SysFont("Arial", 50)
     selectSurface = selectFont.render("Select Game Mode:", True, (0, 0, 0))
     selectRect = selectSurface.get_rect()
     selectRect.center = (screenWidth // 2, screenHeight // 2)
@@ -360,7 +363,8 @@ if __name__ == "__main__":
                         runningHome = False
 
             # Makes all white home screen with 2 basic messages
-            homeScreen.fill("white")
+            # homeScreen.fill("white")
+            homeScreen.blit(background_image, (0, 0))
             homeScreen.blit(welcomeSurface, welcomeRect)
             homeScreen.blit(selectSurface, selectRect)
 
