@@ -296,6 +296,7 @@ if __name__ == "__main__":
     # Creates home screen
     homeScreen = pygame.display.set_mode((screenWidth, screenHeight))
 
+    #Backgroud image for home screen
     background_image = pygame.image.load("source.png").convert()
     background_image = pygame.transform.scale(background_image, (screenWidth, screenHeight))
 
@@ -362,8 +363,7 @@ if __name__ == "__main__":
                         removedCells = 50
                         runningHome = False
 
-            # Makes all white home screen with 2 basic messages
-            # homeScreen.fill("white")
+            # Makes home screen with 2 basic messages
             homeScreen.blit(background_image, (0, 0))
             homeScreen.blit(welcomeSurface, welcomeRect)
             homeScreen.blit(selectSurface, selectRect)
